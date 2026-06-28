@@ -44,7 +44,7 @@ jobs:
         run: |
           curl -X POST "$WECHAT_WEBHOOK_URL" \
             -H "Content-Type: application/json" \
-            -d '{"msgtype":"text","text":{"content":"GitHub Actions 测试消息"}}'
+            -d '{"msgtype":"text","text":{"content":"小廖今天球赛精彩吗"}}'
             
       - name: 随机延迟（避免固定时间访问）
         run: sleep $((RANDOM % 60))  # 随机延迟0-60秒启动
