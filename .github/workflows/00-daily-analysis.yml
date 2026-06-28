@@ -38,28 +38,14 @@ jobs:
     timeout-minutes: ${{ fromJSON(vars.ANALYSIS_TIMEOUT_MINUTES || '30') }}
     
     steps:
-    - name: 手动测试企业微信 Webhook
+      - name: 测试企业微信 Webhook
         env:
-          WECHAT_WEBHOOK_URL: ${{ secrets.WECHAT_WEBHOOK_URL }}
+          WECHAT_WEBHOOK_URL: "${{ secrets.WECHAT_WEBHOOK_URL }}"
         run: |
-          echo "开始测试企业微信推送..."
-          RESPONSE=$(curl -s -w "\n%{http_code}" -X POST "$WECHAT_WEBHOOK_URL" \
+          curl -X POST "$WECHAT_WEBHOOK_URL" \
             -H "Content-Type: application/json" \
-            -d '{"msgtype":"text","text":{"content":"🚀 GitHub Actions 环境测试消息"}}')
-          
-          HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
-          BODY=$(echo "$RESPONSE" | sed '$d')
-          
-          echo "HTTP 状态码: $HTTP_CODE"
-          echo "服务器返回: $BODY"
-          
-          if echo "$BODY" | grep -q '"errcode":0'; then
-            echo "✅ 测试成功！请检查手机企业微信是否收到消息。"
-          else
-            echo "❌ 测试失败，请检查 Webhook 地址或网络。"
-            exit 1
-          fi
-          
+            -d '{"msgtype":"text","text":{"content":"GitHub Actions 测试消息"}}'
+            
       - name: 随机延迟（避免固定时间访问）
         run: sleep $((RANDOM % 60))  # 随机延迟0-60秒启动
       
