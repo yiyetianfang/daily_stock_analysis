@@ -37,15 +37,7 @@ jobs:
     # 添加超时限制，防止任务卡死
     timeout-minutes: ${{ fromJSON(vars.ANALYSIS_TIMEOUT_MINUTES || '30') }}
     
-    steps:
-      - name: 测试企业微信 Webhook
-        env:
-          WECHAT_WEBHOOK_URL: "${{ secrets.WECHAT_WEBHOOK_URL }}"
-        run: |
-          curl -X POST "$WECHAT_WEBHOOK_URL" \
-            -H "Content-Type: application/json" \
-            -d '{"msgtype":"text","text":{"content":"小廖今天球赛精彩吗"}}'
-            
+    steps:   
       - name: 随机延迟（避免固定时间访问）
         run: sleep $((RANDOM % 60))  # 随机延迟0-60秒启动
       
